@@ -33,8 +33,11 @@ class RSessionProxyHandler(SuperviseAndProxyHandler):
 
         # rserver needs USER to be set to something sensible,
         # otherwise it'll throw up an authentication page
-        if not os.environ.get('USER', ''):
-            env['USER'] = getpass.getuser()
+        # if not os.environ.get('USER', ''):
+        #     env['USER'] = getpass.getuser()
+
+        # We need to fix $USER due to our JupyerHub setup
+        env['USER'] = 'nbuser'
 
         return env
 
@@ -77,7 +80,7 @@ server {{
         filename = self.write_conf(user, self.port, site_dir)
 
         # shiny command.
-        return [ 'shiny-server', filename ] 
+        return [ 'shiny-server', filename ]
 
 def setup_handlers(web_app):
     web_app.add_handlers('.*', [
